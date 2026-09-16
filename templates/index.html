@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Cloud Weather Dashboard
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <div>
+
+        <h1>
+            ☁️ Cloud Weather Dashboard
+        </h1>
+
+        <p>
+            AWS Cloud Services Project
+        </p>
+
+    </div>
+
+    <span class="badge">
+        Flask + AWS
+    </span>
+
+</header>
+
+
+<main class="container">
+
+
+    <!-- Search -->
+
+    <form
+        class="search"
+        method="get"
+    >
+
+        <input
+            name="city"
+            value="{{ city }}"
+            placeholder="Enter city e.g. Hyderabad"
+            required
+        >
+
+        <button type="submit">
+            Search Weather
+        </button>
+
+    </form>
+
+
+    {% if error %}
+
+        <div class="error">
+            {{ error }}
+        </div>
+
+    {% endif %}
+
+
+    {% if weather and location %}
+
+    <!-- Current weather -->
+
+    <section class="hero">
+
+        <div>
+
+            <p class="muted">
+
+                {{ location.name }},
+                {{ location.country }}
+
+            </p>
+
+            <div class="temperature">
+
+                {{ weather.temperature }}
+                {{ weather.unit }}
+
+            </div>
+
+            <h2>
+                {{ weather.condition }}
+            </h2>
+
+        </div>
+
+
+        <div class="stats">
+
+            <div>
+
+                <span>
+                    Feels like
+                </span>
+
+                <strong>
+                    {{ weather.feels_like }}°C
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Humidity
+                </span>
+
+                <strong>
+                    {{ weather.humidity }}%
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Wind
+                </span>
+
+                <strong>
+                    {{ weather.wind_speed }}
+                    km/h
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- Forecast -->
+
+    <h2 class="section-title">
+        7-Day Forecast
+    </h2>
+
+
+    <section class="forecast">
+
+        {% for day in forecast %}
+
+        <article class="forecast-card">
+
+            <strong>
+                {{ day.date }}
+            </strong>
+
+            <span>
+                {{ day.condition }}
+            </span>
+
+            <b>
+                {{ day.max }}° /
+                {{ day.min }}°
+            </b>
+
+            <small>
+                Rain chance:
+                {{ day.rain }}%
+            </small>
+
+        </article>
+
+        {% endfor %}
+
+    </section>
+
+    {% endif %}
+
+
+    <!-- AWS -->
+
+    <h2 class="section-title">
+        AWS Services
+    </h2>
+
+
+    <section class="aws-grid">
+
+
+        <article class="aws-card">
+
+            <div class="icon">
+                🖥️
+            </div>
+
+            <h3>
+                Amazon EC2
+            </h3>
+
+            <p>
+                Hosts the Flask application.
+            </p>
+
+            <strong>
+                ✅ Application Host
+            </strong>
+
+        </article>
+
+
+        <article class="aws-card">
+
+            <div class="icon">
+                🗄️
+            </div>
+
+            <h3>
+                Amazon RDS
+            </h3>
+
+            <p>
+                Stores weather search history.
+            </p>
+
+            <strong>
+                {% if database_status %}
+                    ✅ Connected
+                {% else %}
+                    ⚠️ Not Connected
+                {% endif %}
+            </strong>
+
+        </article>
+
+
+        <article class="aws-card">
+
+            <div class="icon">
+                🪣
+            </div>
+
+            <h3>
+                Amazon S3
+            </h3>
+
+            <p>
+                Stores private application assets.
+            </p>
+
+            <strong>
+                {% if s3_status %}
+                    ✅ Connected
+                {% else %}
+                    ⚠️ Not Connected
+                {% endif %}
+            </strong>
+
+        </article>
+
+
+        <article class="aws-card">
+
+            <div class="icon">
+                📊
+            </div>
+
+            <h3>
+                CloudWatch
+            </h3>
+
+            <p>
+                Collects logs, metrics and alarms.
+            </p>
+
+            <strong>
+                ✅ Monitoring
+            </strong>
+
+        </article>
+
+
+        <article class="aws-card">
+
+            <div class="icon">
+                🔐
+            </div>
+
+            <h3>
+                IAM
+            </h3>
+
+            <p>
+                EC2 role provides controlled AWS access.
+            </p>
+
+            <strong>
+                ✅ Role Based
+            </strong>
+
+        </article>
+
+
+        <article class="aws-card">
+
+            <div class="icon">
+                🌐
+            </div>
+
+            <h3>
+                VPC
+            </h3>
+
+            <p>
+                Provides isolated cloud networking.
+            </p>
+
+            <strong>
+                ✅ Secured Network
+            </strong>
+
+        </article>
+
+    </section>
+
+
+    <!-- Recent searches -->
+
+    <h2 class="section-title">
+        Recent Searches
+    </h2>
+
+
+    <div class="table-wrap">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        City
+                    </th>
+
+                    <th>
+                        Country
+                    </th>
+
+                    <th>
+                        Temperature
+                    </th>
+
+                    <th>
+                        Humidity
+                    </th>
+
+                    <th>
+                        Condition
+                    </th>
+
+                    <th>
+                        Time
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for item in recent_searches %}
+
+                <tr>
+
+                    <td>
+                        {{ item.city }}
+                    </td>
+
+                    <td>
+                        {{ item.country or "-" }}
+                    </td>
+
+                    <td>
+                        {{ item.temperature }}°C
+                    </td>
+
+                    <td>
+                        {{ item.humidity }}%
+                    </td>
+
+                    <td>
+                        {{ item.weather_condition }}
+                    </td>
+
+                    <td>
+                        {{ item.searched_at }}
+                    </td>
+
+                </tr>
+
+                {% else %}
+
+                <tr>
+
+                    <td colspan="6">
+                        No searches stored yet.
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</main>
+
+
+<footer>
+
+    Cloud Services & Web App Deployment
+    •
+    Open-Meteo
+    •
+    AWS
+
+</footer>
+
+
+</body>
+
+</html>
