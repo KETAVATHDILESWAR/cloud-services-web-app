@@ -6,3 +6,5 @@ __pycache__/
 *.pem
 *.key
 .DS_Store
+secret.json
+secret.json
