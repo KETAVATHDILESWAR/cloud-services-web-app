@@ -1,1 +1,0 @@
-secret.json secretsmanager create-secret --name cloud-web-db-secret --description Database credentials for Cloud Services Web App --secret-string file://secret.json --region ap-south-1
