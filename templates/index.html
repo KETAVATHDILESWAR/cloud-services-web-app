@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Cloud Services Web App</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+</head>
+
+<body>
+
+    <div class="container">
+
+        <header>
+            <h1>☁️ Cloud Services Web App</h1>
+
+            <p>
+                Flask + EC2 + RDS + S3 + VPC + IAM + CloudWatch
+            </p>
+        </header>
+
+        <section class="card">
+
+            <h2>Add Message</h2>
+
+            <form method="POST" action="/add">
+
+                <input
+                    type="text"
+                    name="name"
+                    placeholder="Your name"
+                    required
+                >
+
+                <textarea
+                    name="message"
+                    placeholder="Enter your message"
+                    required
+                ></textarea>
+
+                <button type="submit">
+                    Add Message
+                </button>
+
+            </form>
+
+        </section>
+
+        <section class="card">
+
+            <h2>Messages</h2>
+
+            {% if messages %}
+
+                {% for message in messages %}
+
+                <div class="message">
+
+                    <h3>{{ message[1] }}</h3>
+
+                    <p>{{ message[2] }}</p>
+
+                    <small>
+                        {{ message[3] }}
+                    </small>
+
+                </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <p>No messages yet.</p>
+
+            {% endif %}
+
+        </section>
+
+        <footer>
+            <p>
+                Cloud Services & Web App Deployment Project
+            </p>
+        </footer>
+
+    </div>
+
+</body>
+
+</html>
